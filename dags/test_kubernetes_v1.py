@@ -1,5 +1,6 @@
 from airflow.sdk import DAG, task
 from kubernetes import client, config, watch
+from urllib3.exceptions import ReadTimeoutError
 
 with DAG(dag_id='test_kubernetes_v1', ) as dag:
     @task
@@ -20,11 +21,15 @@ with DAG(dag_id='test_kubernetes_v1', ) as dag:
         v1 = client.CoreV1Api()
         count = 10
         watcher = watch.Watch()
-        for event in watcher.stream(v1.list_namespace, _request_timeout=60):
-            print("Event: %s %s" % (event['type'], event['object'].metadata.name))
-            count -= 1
-            if not count:
-                watcher.stop()
+        try:
+            for event in watcher.stream(v1.list_namespace, _request_timeout=60):
+                print("Event: %s %s" % (event['type'], event['object'].metadata.name))
+                count -= 1
+                if not count:
+                    watcher.stop()
+
+        except ReadTimeoutError as rte:
+            print("read timeout :", rte)
 
         print("Ended.")
 
