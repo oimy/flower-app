@@ -2,10 +2,10 @@ import importlib.metadata
 
 from airflow.sdk import DAG, task
 
-with DAG(dag_id='hello_v1', ) as dag:
+with DAG(dag_id='test_hello_v1', ) as dag:
     @task
     def hello():
-        print("Hello World!")
+        print("Hello Airflow!")
 
 
     @task

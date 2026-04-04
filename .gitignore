@@ -1,5 +1,6 @@
 logs/
 airflow.*
+values.yaml
 
 .venv/
 .idea/
