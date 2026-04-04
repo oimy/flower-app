@@ -14,5 +14,4 @@ with DAG(dag_id='test_hello_v1', ) as dag:
             print(f"{dist.metadata['Name']}=={dist.version}")
 
 
-    # noinspection PyStatementEffect
     hello() >> print_distributions()
