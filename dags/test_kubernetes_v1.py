@@ -1,7 +1,7 @@
 from airflow.sdk import DAG, task
 from kubernetes import client, config, watch
 
-with DAG(dag_id='test_hello_v1', ) as dag:
+with DAG(dag_id='test_kubernetes_v1', ) as dag:
     @task
     def list_pods():
         config.load_kube_config()
