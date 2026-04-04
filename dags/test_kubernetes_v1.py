@@ -4,7 +4,7 @@ from kubernetes import client, config, watch
 with DAG(dag_id='test_kubernetes_v1', ) as dag:
     @task
     def list_pods():
-        config.load_kube_config()
+        config.load_incluster_config()
 
         v1 = client.CoreV1Api()
         print("Listing pods with their IPs:")
@@ -15,7 +15,7 @@ with DAG(dag_id='test_kubernetes_v1', ) as dag:
 
     @task
     def watch_namespaces():
-        config.load_kube_config()
+        config.load_incluster_config()
 
         v1 = client.CoreV1Api()
         count = 10
