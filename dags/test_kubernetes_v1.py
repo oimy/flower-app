@@ -1,11 +1,15 @@
 from airflow.sdk import DAG, task
 from kubernetes import client, config, watch
+from kubernetes.config import ConfigException
 from urllib3.exceptions import ReadTimeoutError
 
 with DAG(dag_id='test_kubernetes_v1', ) as dag:
     @task
     def list_pods():
-        config.load_incluster_config()
+        try:
+            config.load_incluster_config()
+        except ConfigException:
+            config.load_kube_config()
 
         v1 = client.CoreV1Api()
         print("Listing pods with their IPs:")
@@ -16,7 +20,10 @@ with DAG(dag_id='test_kubernetes_v1', ) as dag:
 
     @task
     def watch_namespaces():
-        config.load_incluster_config()
+        try:
+            config.load_incluster_config()
+        except ConfigException:
+            config.load_kube_config()
 
         v1 = client.CoreV1Api()
         count = 10
